@@ -1,0 +1,6 @@
+outs:
+- md5: 6e944b8f665d63f777037d0e240b69be.dir
+  size: 3801111440
+  nfiles: 13102
+  hash: md5
+  path: LJSpeech-1.1
