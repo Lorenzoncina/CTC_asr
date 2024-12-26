@@ -1,12 +1,12 @@
 data_preparation:
-            wavs_path : "data/LJSpeech-1.1/wavs/"
+            wavs_path : "data/debug/LJSpeech-1.1/wavs/"
             metadata_path : "data/LJSpeech-1.1/metadata.csv"
             frame_length : 256
             frame_step : 160
             fft_length : 384
             batch_size : 32
-            train_save_path : "data/train_processed"
-            val_save_path : "data/val_processed"
+            train_save_path : "data/processed/train_processed"
+            val_save_path : "data/processed/val_processed"
 
 train:
             rnn_units : 512
@@ -14,6 +14,7 @@ train:
             cnn_filter : 32
             kernel_size_cnn_1 : [11, 41]
             kernel_size_cnn_2 : [11, 21]
-            epochs : 40
+            epochs : 20
             learning_rate : 1e-4
-            model_path : 'data/trained_model/model.keras'
+            model_path : 'models/model_20.keras'
+            model_checkpoints : 'models/{epoch:02d}-{val_loss:.2f}.keras'

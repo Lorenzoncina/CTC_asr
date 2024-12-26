@@ -4,3 +4,4 @@ source/.ipynb_checkpoints/ctc_rnn_cnn_asr-checkpoint.ipynb
 data/model.keras
 data/train_processed
 data/val_processed
+/models

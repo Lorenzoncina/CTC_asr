@@ -1,0 +1,33 @@
+schema: '2.0'
+stages:
+  data_prep:
+    cmd: python source/data_prep.py --config parameters.yaml
+    deps:
+    - path: source/data_prep.py
+      hash: md5
+      md5: e625721253eedb73598f5956dae9d1d0
+      size: 4416
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: a9c3a7a80340e773f6630df3aedd63c7.dir
+      size: 13777416479
+      nfiles: 6
+  train:
+    cmd: python source/train.py --config parameters.yaml
+    deps:
+    - path: data/LJSpeech-1.1/
+      hash: md5
+      md5: 6e944b8f665d63f777037d0e240b69be.dir
+      size: 3801111440
+      nfiles: 13102
+    - path: source/train.py
+      hash: md5
+      md5: 689f642bd69f65e7b8a3d78189c12a84
+      size: 7302
+    outs:
+    - path: models/
+      hash: md5
+      md5: 34da222e58b25154be869c7d5875e711.dir
+      size: 6713787822
+      nfiles: 21

@@ -3,13 +3,12 @@ stages:
         cmd: python source/data_prep.py --config parameters.yaml
         deps:
         - source/data_prep.py
-        - data/LJSpeech-1.1/
         outs:
-        - data
+        - data/processed
     train:
-        cmd: python source/train.py --config parameters.yam
+        cmd: python source/train.py --config parameters.yaml
         deps:
         - source/train.py
         - data/LJSpeech-1.1/
         outs:
-        - data/trained_model
+        - models/

@@ -1,8 +1,10 @@
 import argparse
+import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 from load_params import load_params
+from jiwer import wer
 
 # A callback class to output a few transcriptions during training
 class CallbackEval(keras.callbacks.Callback):
@@ -129,13 +131,21 @@ def train(params, train_dataset, validation_datase):
     epochs = params.train.epochs
     learning_rate = float(params.train.learning_rate)
     model_path = params.train.model_path
+    model_checkpoints = params.train.model_checkpoints
 
     # The set of characters accepted in the transcription.
+    global char_to_num
     characters = [x for x in "abcdefghijklmnopqrstuvwxyz'?! "]
     # Mapping characters to integers
     char_to_num = keras.layers.StringLookup(vocabulary=characters, oov_token="")
-    
+    # Mapping integers back to original characters
+    global num_to_char
+    num_to_char = keras.layers.StringLookup(
+        vocabulary=char_to_num.get_vocabulary(), oov_token="", invert=True
+    )
+  
     # Get the model
+    global model
     model = build_model(
         input_dim=fft_length // 2 + 1,
         output_dim=char_to_num.vocabulary_size(),
@@ -149,12 +159,22 @@ def train(params, train_dataset, validation_datase):
     # Callback function to check transcription on the val set.
     validation_callback = CallbackEval(validation_dataset)
     early_stopping = keras.callbacks.EarlyStopping(monitor='loss', patience=3)
+    model_checkpoint_callback = keras.callbacks.ModelCheckpoint(
+        model_checkpoints,
+        monitor="val_loss",
+        verbose=0,
+        save_best_only=False,
+        save_weights_only=False,
+        mode="auto",
+        save_freq="epoch",
+        initial_value_threshold=None,
+    )
     # Train the model
     history = model.fit(
         train_dataset,
         validation_data=validation_dataset,
         epochs=epochs,
-        callbacks=[validation_callback, early_stopping],
+        callbacks=[validation_callback, early_stopping,model_checkpoint_callback],
     )
 
     #save the model
